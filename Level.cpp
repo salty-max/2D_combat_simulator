@@ -5,10 +5,15 @@
 #include "Level.h"
 #include <fstream>
 #include <random>
-#include <ctime>
 
 Level::Level() = default;
-Level::~Level() = default;
+Level::~Level() {
+    for (auto &army : _armies) {
+        for (auto &s: army) {
+			delete s;
+		}
+    }
+};
 
 void Level::load(const char *fileName) {
 	std::ifstream file;
@@ -113,6 +118,8 @@ void Level::update() {
 		cnt++;
 	}
 }
+
+bool Level::isOver() { return (_armies[0].size() == 0 || _armies[1].size() == 0); }
 
 void Level::_processSoldierMove(char direction, Soldier *soldier) {
 	int x, y;

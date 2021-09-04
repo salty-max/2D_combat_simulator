@@ -3,21 +3,18 @@
 //
 
 #include "Simulator.h"
+#include "unistd.h"
 
 Simulator::Simulator(const char *levelFileName) {
 	_level.load(levelFileName);
 }
 
 void Simulator::simulate() {
-	bool playing = true;
-
-	while(playing) {
+	while(!_level.isOver()) {
 		_level.print();
 		_level.update();
-		printf("\nPress any key to continue...");
-		getchar();
+		usleep(30000);
 	}
-
 }
 
 Simulator::~Simulator() = default;

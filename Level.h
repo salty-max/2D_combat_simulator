@@ -17,6 +17,7 @@ public:
 	void load(const char* fileName);
 	void print();
 	void update();
+	bool isOver();
 
 	char getTile(int x, int y);
 	void setTile(int x, int y, char tile, Soldier *soldier);
