@@ -13,6 +13,7 @@ void Simulator::simulate() {
 
 	while(playing) {
 		_level.print();
+		_level.update();
 	}
 }
 

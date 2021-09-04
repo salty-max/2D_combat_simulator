@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+const int NUM_ARMIES = 2;
+
 class Level {
 public:
 	Level();
@@ -21,8 +23,9 @@ public:
 
 private:
 	void _setupArmies();
+	void _processSoldierMove(char direction);
 
 private:
 	std::vector<std::string> _levelData;
-	std::vector<Soldier *> _armies[2];
+	std::vector<Soldier *> _armies[NUM_ARMIES];
 };

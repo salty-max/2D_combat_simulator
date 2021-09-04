@@ -38,8 +38,23 @@ void Level::print() {
 }
 
 void Level::update() {
+	char move;
+	int cnt = 0;
+	bool isDone = false;
 
+	while(!isDone) {
+		isDone = true;
+		for (int i = 0; i < NUM_ARMIES; i++) {
+			if (cnt < _armies[i].size()) {
+				move = _armies[i][cnt]->getMove(_armies, NUM_ARMIES);
+				_processSoldierMove(move);
+				isDone = false;
+			}
+		}
+	}
 }
+
+void Level::_processSoldierMove(char direction) {}
 
 char Level::getTile(int x, int y) {
 	return _levelData[y][x];

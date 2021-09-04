@@ -5,11 +5,12 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 class Soldier {
 public:
 	Soldier(std::string name, char tile, int level, int health, int attack,
-	      int defense, int xpValue);
+	      int defense, int xpValue, int army);
 	void setPosition(int x, int y);
 	void getPosition(int &x, int &y);
 	std::string getName();
@@ -17,8 +18,10 @@ public:
 	int attack();
 	int takeDamage(int attackValue);
 
-	char getMove(int playerX, int playerY);
+	char getMove(std::vector<Soldier *> armies[], int numArmies);
 
+private:
+	Soldier *_getClosestEnemy(std::vector<Soldier *> armies[], int numArmies) const;
 private:
 	std::string _name;
 	char _tile;
@@ -27,6 +30,7 @@ private:
 	int _attack;
 	int _defense;
 	int _xpValue;
+	int _army;
 
 	// Position
 	int _x;
