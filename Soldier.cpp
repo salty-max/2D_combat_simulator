@@ -23,10 +23,12 @@ void Soldier::setPosition(int x, int y) {
 	_y = y;
 }
 
-void Soldier::getPosition(int &x, int &y) {
+void Soldier::getPosition(int &x, int &y) const {
 	x = _x;
 	y = _y;
 }
+
+char Soldier::getTile() const { return _tile; }
 
 std::string Soldier::getName() { return _name; }
 
@@ -86,11 +88,11 @@ Soldier *Soldier::_getClosestEnemy(std::vector<Soldier *> armies[], int numArmie
 	int tx, ty;
 	int distance;
 
-	for (int a = 0; a < armies->size(); a++) {
+	for (int a = 0; a < numArmies; a++) {
 		if (a != _army) {
 			for (auto & e : armies[a]) {
 				e->getPosition(tx, ty);
-				distance = abs(tx - _x) + abs(ty - _y);
+				distance = abs(_x - tx) + abs(_y - ty);
 				if (distance < closestDistance) {
 					closestEnemy = e;
 					closestDistance = distance;

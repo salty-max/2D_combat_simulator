@@ -23,9 +23,9 @@ public:
 
 private:
 	void _setupArmies();
-	void _processSoldierMove(char direction);
+	void _processSoldierMove(char direction, Soldier *soldier);
+	void _moveSoldier(Soldier *soldier, int dx, int dy);
 
-private:
 	std::vector<std::string> _levelData;
 	std::vector<Soldier *> _armies[NUM_ARMIES];
 };

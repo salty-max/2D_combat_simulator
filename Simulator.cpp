@@ -14,7 +14,10 @@ void Simulator::simulate() {
 	while(playing) {
 		_level.print();
 		_level.update();
+		printf("\nPress any key to continue...");
+		getchar();
 	}
+
 }
 
 Simulator::~Simulator() = default;

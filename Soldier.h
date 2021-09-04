@@ -12,7 +12,8 @@ public:
 	Soldier(std::string name, char tile, int level, int health, int attack,
 	      int defense, int xpValue, int army);
 	void setPosition(int x, int y);
-	void getPosition(int &x, int &y);
+	void getPosition(int &x, int &y) const;
+	char getTile() const;
 	std::string getName();
 
 	int attack();
