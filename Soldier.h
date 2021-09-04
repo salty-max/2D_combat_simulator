@@ -14,6 +14,7 @@ public:
 	void setPosition(int x, int y);
 	void getPosition(int &x, int &y) const;
 	char getTile() const;
+	int getArmy() const;
 	std::string getName();
 
 	int attack();

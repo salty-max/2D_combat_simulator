@@ -23,6 +23,8 @@ void Level::load(const char *fileName) {
 	std::string line;
 	while (std::getline(file, line)) {
 		_levelData.push_back(line);
+		_soldiersGrid.emplace_back();
+		_soldiersGrid.back().resize(line.size(), nullptr);
 	}
 
 	file.close();
@@ -37,12 +39,14 @@ void Level::_setupArmies() {
 			tile = getTile(x, y);
 			switch (tile) {
 				case '1':
-					_armies[0].push_back(new Soldier("Army 1 Grunt", tile, 1, 20, 10, 5, 50, 0));
+					_armies[0].push_back(new Soldier("Army 1 Grunt", tile, 1, 10, 10, 5, 50, 0));
 					_armies[0].back()->setPosition(x, y);
+					_soldiersGrid[y][x] = _armies[0].back();
 					break;
 				case '2':
-					_armies[1].push_back(new Soldier("Army 2 Grunt", tile, 1, 20, 10, 5, 50, 1));
+					_armies[1].push_back(new Soldier("Army 2 Grunt", tile, 1, 10, 10, 5, 50, 1));
 					_armies[1].back()->setPosition(x, y);
+					_soldiersGrid[y][x] = _armies[1].back();
 					break;
 				case '#':
 				case '.':
@@ -73,10 +77,21 @@ void Level::_setupArmies() {
 }
 
 void Level::print() {
+	printf("%s", std::string(150, '\n').c_str());
 	for (int y = 0; y < _levelData.size(); y++) {
 		printf("\n");
 		for (int x = 0; x < _levelData[y].size(); x++) {
-			printf("%c", _levelData[y][x]);
+			std::string color;
+
+			if (_levelData[y][x] == '1') {
+				color = "\033[1;34m";
+			} else if (_levelData[y][x] == '2') {
+				color = "\033[1;35m";
+			} else {
+				color = "\033[1;37m";
+			}
+
+			printf("%s%c\033[0m", color.c_str(), _levelData[y][x]);
 		}
 	}
 }
@@ -136,6 +151,7 @@ void Level::_processSoldierMove(char direction, Soldier *soldier) {
 		case '.':
 			_moveSoldier(soldier, destX, destY);
 		default:
+			_battle(soldier, destX, destY);
 			break;
 	}
 }
@@ -144,15 +160,41 @@ void Level::_moveSoldier(Soldier *soldier, int dx, int dy) {
 	int x, y;
 	soldier->getPosition(x, y);
 
-	setTile(dx, dy, soldier->getTile());
-	setTile(x, y, '.');
+	setTile(dx, dy, soldier->getTile(), soldier);
+	setTile(x, y, '.', nullptr);
 	soldier->setPosition(dx, dy);
+}
+
+void Level::_battle(Soldier *attacker, int tx, int ty) {
+	int x, y;
+	attacker->getPosition(x, y);
+	Soldier *defender = getSoldier(tx, ty);
+	int defenderArmy = defender->getArmy();
+
+	if (attacker->getArmy() == defenderArmy) return;
+
+	int result = defender->takeDamage(attacker->attack());
+
+	if (result != 0) {
+		for (auto & s : _armies[defenderArmy]) {
+			if (s == defender) {
+				s = _armies[defenderArmy].back();
+				_armies[defenderArmy].pop_back();
+
+				setTile(tx, ty, '.', nullptr);
+				break;
+			}
+		}
+	}
 }
 
 char Level::getTile(int x, int y) {
 	return _levelData[y][x];
 }
 
-void Level::setTile(int x, int y, char tile) {
+void Level::setTile(int x, int y, char tile, Soldier *soldier) {
 	_levelData[y][x] = tile;
+	_soldiersGrid[y][x] = soldier;
 }
+
+Soldier *Level::getSoldier(int x, int y) { return _soldiersGrid[y][x]; }

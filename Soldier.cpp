@@ -30,10 +30,13 @@ void Soldier::getPosition(int &x, int &y) const {
 
 char Soldier::getTile() const { return _tile; }
 
+int Soldier::getArmy() const { return _army; }
+
 std::string Soldier::getName() { return _name; }
 
 int Soldier::attack() {
-	static std::default_random_engine randomEngine(time(nullptr));
+	std::random_device::result_type seed = std::random_device()();
+	std::mt19937 randomEngine(seed);
 	std::uniform_int_distribution<int> attackRoll(0, _attack);
 
 	return attackRoll(randomEngine);

@@ -19,13 +19,16 @@ public:
 	void update();
 
 	char getTile(int x, int y);
-	void setTile(int x, int y, char tile);
+	void setTile(int x, int y, char tile, Soldier *soldier);
+	Soldier *getSoldier(int x, int y);
 
 private:
 	void _setupArmies();
 	void _processSoldierMove(char direction, Soldier *soldier);
 	void _moveSoldier(Soldier *soldier, int dx, int dy);
+	void _battle(Soldier *attacker, int tx, int ty);
 
 	std::vector<std::string> _levelData;
+	std::vector<std::vector<Soldier *> > _soldiersGrid;
 	std::vector<Soldier *> _armies[NUM_ARMIES];
 };
