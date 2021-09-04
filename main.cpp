@@ -1,6 +1,10 @@
-#include <iostream>
+#include "Simulator.h"
 
 int main() {
-	std::cout << "Hello, World!" << std::endl;
+	Simulator simulator("battlefield.txt");
+
+	simulator.simulate();
+
+	getchar();
 	return 0;
 }
